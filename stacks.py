@@ -14,6 +14,8 @@ def _close_open_views(window: sublime.Window) -> None:
   for v in views:
     v.close()
 
+  window.run_command('set_layout', {"cols": [0.0, 1.0], "rows": [0.0, 1.0], "cells": [[0, 0, 1, 1]]})
+
 _stack_file_name = "project.sublime-stack"
 
 class StacksSaveCommand(sublime_plugin.WindowCommand):
@@ -26,7 +28,7 @@ class StacksSaveCommand(sublime_plugin.WindowCommand):
         project_dir: str = window.extract_variables()['folder']
 
         views: List[ViewFileName] = [ViewFileName(v, FileName(v.file_name())) for v in window.views() if v.file_name() and not v.is_scratch() and not v.is_dirty()]
-        views_to_save: List[str] = list(map(lambda v: v.file_name, views))
+        views_to_save: List[str] = list(map(lambda v: v.file_name.value, views))
 
         # TODO: Merge with existing values
         json_content: str = json.dumps({ _get_stack_name(window) : views_to_save})
