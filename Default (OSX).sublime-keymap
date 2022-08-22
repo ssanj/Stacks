@@ -1,0 +1,4 @@
+[
+  { "keys": ["f2"], "command": "stacks_save"},
+  { "keys": ["shift+f2"], "command": "stacks_open"},
+]
