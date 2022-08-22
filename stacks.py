@@ -80,11 +80,19 @@ class StacksOpenCommand(sublime_plugin.WindowCommand):
             has_stack_name_in_file = stack_name in loaded_stacks
             if stack_name:
               if has_stack_name_in_file:
-                loaded_views: List[str] = loaded_stacks[stack_name]
+                window_state: Dict[str, Any] = loaded_stacks[stack_name]
 
                 _close_open_views(window)
-                for v in loaded_views:
-                  window.open_file(v)
+                window.set_layout(window_state['layout'])
+
+                # TODO make this safer or use a regex
+                key_groups: List[int] = [int(key.split("group")[1]) for key in window_state.keys() if key.startswith("group")]
+
+                for group in key_groups:
+                  views_in_group = window_state[f"group{group}"]
+                  for v in views_in_group:
+                    # TODO: Check if the file still exists
+                    window.open_file(fname = v, group = group)
               else:
                 sublime.message_dialog(f"Could not find stack named:\n{stack_name}\nin:\n{saved_file}")
 
