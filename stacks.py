@@ -18,6 +18,19 @@ def _close_open_views(window: sublime.Window) -> None:
 
 _stack_file_name = "project.sublime-stack"
 
+def _get_window_state(window: sublime.Window) -> Dict[str, Any]:
+  groups: List[int] = list(range(0, window.num_groups()))
+
+  window_state: Dict[str, Any] = {}
+
+  for g in groups:
+    views_in_group = window.views_in_group(g)
+    file_names: List[str] = [v.file_name() for v in views_in_group if v.file_name() and not v.is_scratch() and not v.is_dirty()] # type: ignore
+    window_state.update({ f"group{g}":  file_names})
+
+  window_state.update({ "layout": window.layout() })
+  return window_state
+
 class StacksSaveCommand(sublime_plugin.WindowCommand):
 
   def run(self):
@@ -27,8 +40,9 @@ class StacksSaveCommand(sublime_plugin.WindowCommand):
       if 'folder' in window.extract_variables():
         project_dir: str = window.extract_variables()['folder']
 
-        views: List[ViewFileName] = [ViewFileName(v, FileName(v.file_name())) for v in window.views() if v.file_name() and not v.is_scratch() and not v.is_dirty()]
-        views_to_save: List[str] = list(map(lambda v: v.file_name.value, views))
+        # views: List[ViewFileName] = [ViewFileName(v, FileName(v.file_name())) for v in window.views() if v.file_name() and not v.is_scratch() and not v.is_dirty()]
+        # views_to_save: List[str] = list(map(lambda v: v.file_name.value, views))
+        views_to_save = _get_window_state(window)
 
         # TODO: Merge with existing values
         json_content: str = json.dumps({ _get_stack_name(window) : views_to_save})
