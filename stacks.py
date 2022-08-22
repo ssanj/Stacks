@@ -54,7 +54,11 @@ class StacksOpenCommand(sublime_plugin.WindowCommand):
 
         if os.path.exists(saved_file):
           with open(saved_file, "r") as file:
-            loaded_stacks: Dict[str, Any] = json.loads(file.read())
+            try:
+              loaded_stacks: Dict[str, Any] = json.loads(file.read())
+            except json.decoder.JSONDecodeError:
+              sublime.message_dialog(f"Could not decode {saved_file}.\nConsider deleting it and resaving it or make it a valid json file.")
+              return
 
             stack_name = _get_stack_name(window)
             has_stack_name_in_file = stack_name in loaded_stacks
@@ -66,9 +70,10 @@ class StacksOpenCommand(sublime_plugin.WindowCommand):
                 for v in loaded_views:
                   window.open_file(v)
               else:
-                sublime.message_dialog(f"Could not find stack named: {stack_name}")
+                sublime.message_dialog(f"Could not find stack named:\n{stack_name}\nin:\n{saved_file}")
+
         else:
-          sublime.message_dialog(f"Could not find saved file: {saved_file}.\nPlease try saving a stack first.")
+          sublime.message_dialog(f"Could not find saved file:\n{saved_file}.\nPlease try saving a stack first.")
       else:
         sublime.message_dialog("Could not find project directory")
 
