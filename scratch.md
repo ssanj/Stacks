@@ -27,6 +27,9 @@
 1. Drop list of saved stacks when the user wants to load a stack [x]
 1. Load stack and open views [x]
 1. Allow the user to delete a stack by name
+1. Allow saving back to the existing stack (if you already opened it) [x]
+1. Show stack name on status bar
+1. Add logging through Logger
 
 
 # Questions
