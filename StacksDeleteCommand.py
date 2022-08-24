@@ -49,3 +49,5 @@ class StacksDeleteCommand(StacksCommand):
     # if it matches the deleted stack name, then remove it from settings
     if current_stack_name and current_stack_name == stack_to_delete:
       window.settings().erase(_loaded_stack_name_settings_key)
+
+    sublime.message_dialog(f"Deleted {stack_to_delete}")
