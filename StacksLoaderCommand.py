@@ -8,7 +8,7 @@ from Stacks.components.Files import StackFileName
 
 class StacksLoaderCommand(StacksCommand):
 
-  def on_run(self, window: sublime.Window, stack_file: str) -> None:
+  def on_run(self, window: sublime.Window, stack_file: StackFileName) -> None:
     load_result: Either[LoadError, Dict[str, Any]] = load_stack_file(stack_file)
 
     if load_result.has_value():
@@ -18,7 +18,7 @@ class StacksLoaderCommand(StacksCommand):
       window.show_quick_panel(
         items = items,
         placeholder = self.loader_message(),
-        on_select = lambda index: self.on_stack_loaded(StackFileName(stack_file), window, loaded_stacks, items, index)
+        on_select = lambda index: self.on_stack_loaded(stack_file, window, loaded_stacks, items, index)
       )
     else:
       error: LoadError = load_result.error()

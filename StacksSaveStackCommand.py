@@ -10,7 +10,7 @@ from Stacks.components.ResultTypes import Either
 
 class StacksSaveCommand(StacksCommand):
 
-  def on_run(self, window: sublime.Window, stack_file: str):
+  def on_run(self, window: sublime.Window, stack_file: StackFileName):
     loaded_stack_name = window.settings().get(_loaded_stack_name_settings_key)
 
     if loaded_stack_name:
@@ -32,7 +32,7 @@ class StacksSaveCommand(StacksCommand):
       on_cancel = None
     )
 
-  def on_stack_name(self, stack_file: str, window: sublime.Window, stack_name: str) -> None:
+  def on_stack_name(self, stack_file: StackFileName, window: sublime.Window, stack_name: str) -> None:
     # TODO: Merge with existing values
     # TODO: if name is already taken prompt for overwrite confirmation?
 
@@ -43,7 +43,7 @@ class StacksSaveCommand(StacksCommand):
     stacks_to_save.update({ stack_name : views_to_save})
     new_stack_json_content: str = json.dumps(stacks_to_save)
 
-    save_result: Either[SaveError, None] = save_stack_file(StackFileName(stack_file), new_stack_json_content)
+    save_result: Either[SaveError, None] = save_stack_file(stack_file, new_stack_json_content)
     if save_result.has_value():
       close_all_windows = sublime.yes_no_cancel_dialog("Close all windows?")
       if close_all_windows == sublime.DIALOG_YES:

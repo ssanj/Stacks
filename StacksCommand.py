@@ -1,7 +1,8 @@
 from abc import abstractmethod
 import sublime
 import sublime_plugin
-from Stacks.components.Common import _stack_file_name, _close_open_views, _loaded_stack_name_settings_key
+from Stacks.components.Common import _stack_file_name, _loaded_stack_name_settings_key
+from Stacks.components.Files import StackFileName
 
 class StacksCommand(sublime_plugin.WindowCommand):
 
@@ -15,7 +16,7 @@ class StacksCommand(sublime_plugin.WindowCommand):
       if not StacksCommand.project_dir:
          if 'folder' in window.extract_variables():
             StacksCommand.project_dir: str = window.extract_variables()['folder']
-            StacksCommand.stack_file = f"{StacksCommand.project_dir}/{_stack_file_name}"
+            StacksCommand.stack_file = StackFileName(f"{StacksCommand.project_dir}/{_stack_file_name}")
             # remove any saved stack names on restart
             window.settings().erase(_loaded_stack_name_settings_key)
             print(f"setting project_dir and stack file")
@@ -30,5 +31,5 @@ class StacksCommand(sublime_plugin.WindowCommand):
       sublime.message_dialog("No active window found")
 
   @abstractmethod
-  def on_run(self, window: sublime.Window, stack_file: str) -> None:
+  def on_run(self, window: sublime.Window, stack_file: StackFileName) -> None:
     pass
