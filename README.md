@@ -1,23 +1,38 @@
-# QuickView
+# Stacks
 
-[Sublime Text](https://www.sublimetext.com/) plugin to view symbol definition under the cursor in a popup.
+[Sublime Text](https://www.sublimetext.com/) plugin to manage collections of views under different circumstances.
 
-![](quick-view.png)
+A **stack** is a collection of views and its current layout.
+
+TODO
+
+![]()
 
 
 ## Installation
 
 - Open the command palette with `CMD + SHIFT + P`
 - Select `Package Control: Add Repository`
-- Enter https://github.com/ssanj/QuickView for the repository
+- Enter https://github.com/ssanj/Stacks for the repository
 - Select `Package Control: Install Package`
 - Choose QuickView
 
 
 ## Functionality
 
-### View definition of symbol under the cursor
+### Save a stack
 
-To open the symbol definition in a popup press `CMD + F7`.
+Save the current view stack with  `F2`
 
-![](quick-view-actions.gif)
+### Load a stack
+
+Load a given stack with  `SHIFT + F2`
+
+### Delete a stack
+
+Delete a given stack with `CTRL + SHIFT + F2`
+
+### Rename a stack
+
+Rename a stack with `SHIFT + CMD + F2`
+

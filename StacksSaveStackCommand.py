@@ -44,7 +44,6 @@ class StacksSaveCommand(StacksCommand):
     new_stack_json_content: str = json.dumps(stacks_to_save)
     save_result: Either[SaveError, None] = save_stack_file(stack_file, new_stack_json_content)
     if save_result.has_value():
-      print("2")
       close_all_windows = sublime.yes_no_cancel_dialog("Close all windows?")
       if close_all_windows == sublime.DIALOG_YES:
         # TODO: Do we need to move this option to config?
@@ -54,8 +53,10 @@ class StacksSaveCommand(StacksCommand):
       else:
         # Set stack name on save and leave open
         window.settings().update({_loaded_stack_name_settings_key : stack_name})
+        view = window.active_view()
+        if view:
+          view.show_popup(f"<h1>Saved stack: {stack_name}<h1>", max_width=640, max_height=480)
     else:
-      print("3")
       error: SaveError = save_result.error()
       sublime.message_dialog(f"Could not save stack.\nError:\n{str(error.value)}")
 
