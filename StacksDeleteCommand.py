@@ -36,5 +36,5 @@ class StacksDeleteCommand(StacksLoaderCommand):
       sublime.message_dialog(f"Deleted {stack_to_delete}")
     else:
       error: SaveError = save_result.error()
-      sublime.message_dialog(f"Could not save stack.\nError:\n{error}")
+      sublime.message_dialog(f"Could not save stack.\nError:\n{str(error.value)}")
 
