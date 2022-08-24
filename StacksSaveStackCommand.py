@@ -2,7 +2,7 @@ import sublime
 import sublime_plugin
 from typing import Optional, Any, Dict
 import json
-from Stacks.components.Common import _open_stacks, _get_window_state, _stack_file_name, _close_open_views, _loaded_stack_name_settings_key
+from Stacks.components.Common import _open_stacks, _get_window_state, _close_open_views, _loaded_stack_name_settings_key
 from Stacks.StacksCommand import StacksCommand
 from Stacks.components.FileUtils import SaveError, save_stack_file
 from Stacks.components.Files import StackFileName
@@ -42,9 +42,9 @@ class StacksSaveCommand(StacksCommand):
     stacks_to_save: Dict[str, Any] = loaded_stacks if loaded_stacks else {}
     stacks_to_save.update({ stack_name : views_to_save})
     new_stack_json_content: str = json.dumps(stacks_to_save)
-
     save_result: Either[SaveError, None] = save_stack_file(stack_file, new_stack_json_content)
     if save_result.has_value():
+      print("2")
       close_all_windows = sublime.yes_no_cancel_dialog("Close all windows?")
       if close_all_windows == sublime.DIALOG_YES:
         # TODO: Do we need to move this option to config?
@@ -55,6 +55,7 @@ class StacksSaveCommand(StacksCommand):
         # Set stack name on save and leave open
         window.settings().update({_loaded_stack_name_settings_key : stack_name})
     else:
+      print("3")
       error: SaveError = save_result.error()
       sublime.message_dialog(f"Could not save stack.\nError:\n{str(error.value)}")
 

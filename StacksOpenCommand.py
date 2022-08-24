@@ -7,18 +7,15 @@ from Stacks.components.Common import _get_window_state, _stack_file_name, _close
 from Stacks.components.FileUtils import LoadError, load_stack_file
 from Stacks.components.Files import StackFileName
 from Stacks.components.ResultTypes import Either, RightEither, LeftEither
-from Stacks.StacksLoaderCommand import StacksLoaderCommand
+from Stacks.StacksLoaderCommand import StacksLoaderCommand, SelectedStackName
 
 class StacksOpenCommand(StacksLoaderCommand):
 
   def loader_message(self) -> str:
     return "Which stack would you like to load?"
 
-  def on_stack_loaded(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], stack_names: List[str], stack_name_index: int) -> None:
-    if stack_name_index < 0 or stack_name_index > len(stack_names):
-      return
-
-    stack_name = stack_names[stack_name_index]
+  def on_stack_name_selected(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], selected_stack_name: SelectedStackName) -> None:
+    stack_name = selected_stack_name.value
 
     # TODO: Validate stack_name
     has_stack_name_in_file = stack_name in loaded_stacks

@@ -4,7 +4,7 @@ from typing import Optional, List, Any, Dict
 import json
 import os
 from Stacks.components.Common import _get_window_state, _stack_file_name, _close_open_views, _loaded_stack_name_settings_key
-from Stacks.StacksLoaderCommand import StacksLoaderCommand
+from Stacks.StacksLoaderCommand import StacksLoaderCommand, SelectedStackName
 from Stacks.components.FileUtils import SaveError, save_stack_file
 from Stacks.components.Files import StackFileName
 from Stacks.components.ResultTypes import Either
@@ -15,11 +15,8 @@ class StacksDeleteCommand(StacksLoaderCommand):
     return "Which stack would you like to delete?"
 
 
-  def on_stack_loaded(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], stack_names: List[str], stack_name_index: int) -> None:
-    if stack_name_index < 0 or stack_name_index > len(stack_names):
-      return
-
-    stack_to_delete = stack_names[stack_name_index]
+  def on_stack_name_selected(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], selected_stack_name: SelectedStackName) -> None:
+    stack_to_delete = selected_stack_name.value
 
     loaded_stacks.pop(stack_to_delete, None)
     updated_stack_content = json.dumps(loaded_stacks)

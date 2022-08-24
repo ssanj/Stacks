@@ -4,7 +4,7 @@ from typing import Optional, List, Any, Dict
 import json
 import os
 from Stacks.components.Common import _get_window_state, _stack_file_name, _close_open_views, _loaded_stack_name_settings_key
-from Stacks.StacksLoaderCommand import StacksLoaderCommand
+from Stacks.StacksLoaderCommand import StacksLoaderCommand, SelectedStackName
 from Stacks.components.FileUtils import save_stack_file
 from Stacks.components.FileUtils import SaveError
 from Stacks.components.Files import StackFileName
@@ -16,22 +16,17 @@ class StacksRenameCommand(StacksLoaderCommand):
     return "Which stack would you like to rename?"
 
 
-  def on_stack_loaded(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], stack_names: List[str], stack_name_index: int) -> None:
-    if stack_name_index < 0 or stack_name_index > len(stack_names):
-      return
-
-    stack_to_rename = stack_names[stack_name_index]
-
+  def on_stack_name_selected(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], selected_stack_name: SelectedStackName) -> None:
     window.show_input_panel(
       caption = "Stack name",
-      on_done = lambda new_stack_name: self.on_stack_rename(stack_file, stack_to_rename, loaded_stacks, window, new_stack_name),
+      on_done = lambda new_stack_name: self.on_stack_rename(stack_file, selected_stack_name, loaded_stacks, window, new_stack_name),
       initial_text = "",
       on_change = None,
       on_cancel = None
     )
 
-  def on_stack_rename(self, stack_file: StackFileName, old_stack_name: str, loaded_stacks: Dict[str, Any], window: sublime.Window, new_stack_name: str) -> None:
-
+  def on_stack_rename(self, stack_file: StackFileName, selected_stack_name: SelectedStackName, loaded_stacks: Dict[str, Any], window: sublime.Window, new_stack_name: str) -> None:
+    old_stack_name = selected_stack_name.value
     stack_content = loaded_stacks.pop(old_stack_name, None)
 
     # we found the existing stack for the old name
