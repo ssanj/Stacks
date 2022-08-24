@@ -45,5 +45,9 @@ class StacksSaveCommand(StacksCommand):
       sublime.message_dialog(f"Could not save stack.\nError:\n{str(e)}")
       return
 
-    # TODO: Do we need to move this option to config?
-    _close_open_views(window)
+    close_all_windows = sublime.yes_no_cancel_dialog("Close all windows?")
+    if close_all_windows == sublime.DIALOG_YES:
+      # TODO: Do we need to move this option to config?
+      _close_open_views(window)
+    else:
+      window.settings().update({_loaded_stack_name_settings_key : stack_name})
