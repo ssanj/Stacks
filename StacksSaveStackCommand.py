@@ -49,5 +49,8 @@ class StacksSaveCommand(StacksCommand):
     if close_all_windows == sublime.DIALOG_YES:
       # TODO: Do we need to move this option to config?
       _close_open_views(window)
+      # Remove stack name of save and close
+      window.settings().erase(_loaded_stack_name_settings_key)
     else:
+      # Set stack name on save and leave open
       window.settings().update({_loaded_stack_name_settings_key : stack_name})

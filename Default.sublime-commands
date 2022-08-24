@@ -1,2 +1,3 @@
 [
+  { "caption": "Stacks: Show Stack Name", "command": "stacks_show_stack_name" },
 ]
