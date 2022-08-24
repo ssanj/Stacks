@@ -33,6 +33,7 @@
 1. Prompt before closing all tabs [x]
 1. Move out common functions that return an ADT (open_stack, save_stack)
 1. Rename stack? [x]
+1. If the view gets detached from a saved stack, allow reattaching and saving to an existing stack.
 
 # Questions
 
