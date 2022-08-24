@@ -43,4 +43,9 @@ class StacksDeleteCommand(StacksCommand):
       sublime.message_dialog(f"Could not save stack.\nError:\n{str(e)}")
       return
 
-    window.settings().erase(_loaded_stack_name_settings_key)
+    # get the currently loaded stack name
+    current_stack_name = window.settings().get(_loaded_stack_name_settings_key)
+
+    # if it matches the deleted stack name, then remove it from settings
+    if current_stack_name and current_stack_name == stack_to_delete:
+      window.settings().erase(_loaded_stack_name_settings_key)
