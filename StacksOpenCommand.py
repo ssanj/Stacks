@@ -5,27 +5,33 @@ import json
 import os
 from Stacks.components.Common import _get_window_state, _stack_file_name, _close_open_views, _loaded_stack_name_settings_key
 from Stacks.StacksCommand import StacksCommand
+from Stacks.components.FileUtils import LoadError, load_stack_file
+from Stacks.components.ResultTypes import Either, RightEither, LeftEither
 
 class StacksOpenCommand(StacksCommand):
 
   def on_run(self, window: sublime.Window, stack_file: str):
-    if os.path.exists(stack_file):
-      with open(stack_file, "r") as file:
-        try:
-          loaded_stacks: Dict[str, Any] = json.loads(file.read())
-        except json.decoder.JSONDecodeError:
-          sublime.message_dialog(f"Could not decode {stack_file}.\nConsider deleting it and resaving it or make it a valid json file.")
-          return
+    load_result: Either[LoadError, Dict[str, Any]] = load_stack_file(stack_file)
 
-        items: List[str] = [key for key in loaded_stacks.keys()]
+    if load_result.has_value():
+      loaded_stacks = load_result.value()
+      items: List[str] = [key for key in loaded_stacks.keys()]
 
-        window.show_quick_panel(
-          items = items,
-          placeholder = "Which stack would you like to load?",
-          on_select = lambda index: self.on_stack_load(stack_file, window, loaded_stacks, items, index)
-        )
+      window.show_quick_panel(
+        items = items,
+        placeholder = "Which stack would you like to load?",
+        on_select = lambda index: self.on_stack_load(stack_file, window, loaded_stacks, items, index)
+      )
     else:
-      sublime.message_dialog(f"Could not find saved file:\n{stack_file}.\nPlease try saving a stack first.")
+      error: LoadError = load_result.error()
+
+      if error == LoadError.STACK_FILE_NOT_FOUND:
+        sublime.message_dialog(f"Could not find saved file:\n{stack_file}.\nPlease try saving a stack first.")
+      elif error == LoadError.COULD_NOT_DECODE_STACK_FILE:
+        sublime.message_dialog(f"Could not decode {stack_file}.\nConsider deleting it and resaving it or make it a valid json file.")
+      else:
+        sublime.message_dialog(f"An unexpected error occurred: {error}")
+
 
   def on_stack_load(self, stack_file: str, window: sublime.Window, loaded_stacks: Dict[str, Any], stack_names: List[str], stack_index: int) -> None:
     if stack_index < 0 or stack_index > len(stack_names):
