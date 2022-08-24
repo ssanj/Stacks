@@ -26,20 +26,17 @@
 1. Expand config to above format (without groups and layout) [x]
 1. Drop list of saved stacks when the user wants to load a stack [x]
 1. Load stack and open views [x]
-1. Allow the user to delete a stack by name
+1. Allow the user to delete a stack by name [x]
 1. Allow saving back to the existing stack (if you already opened it) [x]
 1. Show stack name on status bar
 1. Add logging through Logger
 1. Prompt before closing all tabs [x]
-
+1. Move out common functions that return an ADT (open_stack, save_stack)
+1. Rename stack?
 
 # Questions
 
 1. Do we want to close all open views on saving and loading stacks?
 1. Do we want to persist the whole window or just the second group?
-1. Do we want to close the group after persisting?
-1. How do we disallow existing stack names?
-1. Do we need to allow deletion of stacks?
 1. Do we need to allow renaming of stacks? (delete + save)
 1. Do we need a view to preview existing stacks?
-1. Do we need a way to delete a project's stacks?
