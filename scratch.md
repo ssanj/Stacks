@@ -30,7 +30,7 @@
 1. Allow saving back to the existing stack (if you already opened it) [x]
 1. Show stack name on status bar
 1. Add logging through Logger
-1. Prompt before closing all tabs
+1. Prompt before closing all tabs [x]
 
 
 # Questions
