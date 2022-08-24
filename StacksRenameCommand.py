@@ -20,7 +20,7 @@ class StacksRenameCommand(StacksLoaderCommand):
     window.show_input_panel(
       caption = "Stack name",
       on_done = lambda new_stack_name: self.on_stack_rename(stack_file, selected_stack_name, loaded_stacks, window, new_stack_name),
-      initial_text = "",
+      initial_text = selected_stack_name.value,
       on_change = None,
       on_cancel = None
     )
