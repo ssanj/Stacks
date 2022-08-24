@@ -32,11 +32,11 @@
 1. Add logging through Logger
 1. Prompt before closing all tabs [x]
 1. Move out common functions that return an ADT (open_stack, save_stack)
-1. Rename stack?
+1. Rename stack? [x]
 
 # Questions
 
 1. Do we want to close all open views on saving and loading stacks?
 1. Do we want to persist the whole window or just the second group?
-1. Do we need to allow renaming of stacks? (delete + save)
 1. Do we need a view to preview existing stacks?
+1. What do we do when within a loaded session, all the windows are closed? Should we remove the stack.name or leave it?
