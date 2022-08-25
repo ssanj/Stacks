@@ -33,10 +33,10 @@ class StacksCommand(sublime_plugin.WindowCommand):
         self.logger.info(f"project_dir is already set!")
         pass #project_dir and stack_file have been set
 
-      self.on_run(window, StacksCommand.stack_file, self.logger)
+      self.on_run(window, self.logger, StacksCommand.stack_file, )
     else:
       sublime.message_dialog("No active window found")
 
   @abstractmethod
-  def on_run(self, window: sublime.Window, stack_file: StackFileName, logger: logging.Logger) -> None:
+  def on_run(self, window: sublime.Window, logger: logging.Logger, stack_file: StackFileName) -> None:
     pass

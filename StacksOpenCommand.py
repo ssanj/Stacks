@@ -15,7 +15,7 @@ class StacksOpenCommand(StacksLoaderCommand):
   def loader_message(self) -> str:
     return "Which stack would you like to load?"
 
-  def on_stack_name_selected(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], selected_stack_name: SelectedStackName, logger: Logger) -> None:
+  def on_stack_name_selected(self, window: sublime.Window, logger: Logger, stack_file: StackFileName, loaded_stacks: Dict[str, Any], selected_stack_name: SelectedStackName) -> None:
     stack_name = selected_stack_name.value
 
     # TODO: Validate stack_name

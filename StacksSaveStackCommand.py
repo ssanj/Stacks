@@ -11,13 +11,13 @@ from logging import Logger
 
 class StacksSaveCommand(StacksCommand):
 
-  def on_run(self, window: sublime.Window, stack_file: StackFileName, logger: Logger):
+  def on_run(self, window: sublime.Window, logger: Logger, stack_file: StackFileName):
     loaded_stack_name = window.settings().get(_loaded_stack_name_settings_key)
 
     if loaded_stack_name:
       update_stack = sublime.yes_no_cancel_dialog(f"Update stack: {loaded_stack_name}")
       if update_stack == sublime.DIALOG_YES:
-        return self.on_stack_name(stack_file, window, loaded_stack_name)
+        return self.on_stack_name(window, stack_file, loaded_stack_name)
       elif update_stack == sublime.DIALOG_CANCEL:
         return
       else:
@@ -27,13 +27,13 @@ class StacksSaveCommand(StacksCommand):
 
     window.show_input_panel(
       caption = "Stack name",
-      on_done = lambda sn: self.on_stack_name(stack_file, window, sn),
+      on_done = lambda sn: self.on_stack_name(window, stack_file, sn),
       initial_text = "",
       on_change = None,
       on_cancel = None
     )
 
-  def on_stack_name(self, stack_file: StackFileName, window: sublime.Window, stack_name: str) -> None:
+  def on_stack_name(self, window: sublime.Window, stack_file: StackFileName, stack_name: str) -> None:
     # TODO: Merge with existing values
     # TODO: if name is already taken prompt for overwrite confirmation?
 

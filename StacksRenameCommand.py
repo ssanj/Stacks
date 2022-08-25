@@ -17,7 +17,7 @@ class StacksRenameCommand(StacksLoaderCommand):
     return "Which stack would you like to rename?"
 
 
-  def on_stack_name_selected(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], selected_stack_name: SelectedStackName, logger: Logger) -> None:
+  def on_stack_name_selected(self, window: sublime.Window, logger: Logger, stack_file: StackFileName, loaded_stacks: Dict[str, Any], selected_stack_name: SelectedStackName) -> None:
     window.show_input_panel(
       caption = "Stack name",
       on_done = lambda new_stack_name: self.on_stack_rename(stack_file, selected_stack_name, loaded_stacks, window, new_stack_name),
