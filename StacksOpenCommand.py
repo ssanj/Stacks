@@ -8,13 +8,14 @@ from Stacks.components.FileUtils import LoadError, load_stack_file
 from Stacks.components.Files import StackFileName
 from Stacks.components.ResultTypes import Either, RightEither, LeftEither
 from Stacks.StacksLoaderCommand import StacksLoaderCommand, SelectedStackName
+from logging import Logger
 
 class StacksOpenCommand(StacksLoaderCommand):
 
   def loader_message(self) -> str:
     return "Which stack would you like to load?"
 
-  def on_stack_name_selected(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], selected_stack_name: SelectedStackName) -> None:
+  def on_stack_name_selected(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], selected_stack_name: SelectedStackName, logger: Logger) -> None:
     stack_name = selected_stack_name.value
 
     # TODO: Validate stack_name
@@ -35,6 +36,6 @@ class StacksOpenCommand(StacksLoaderCommand):
           window.open_file(fname = v, group = group)
 
       window.settings().update({_loaded_stack_name_settings_key : stack_name})
-      print(f"stack loaded: {stack_name}")
+      logger.info(f"stack loaded: {stack_name}")
     else:
       sublime.message_dialog(f"Could not find stack named:\n{stack_name}\nin:\n{stack_file.value}")

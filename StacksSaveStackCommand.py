@@ -7,10 +7,11 @@ from Stacks.StacksCommand import StacksCommand
 from Stacks.components.FileUtils import SaveError, save_stack_file
 from Stacks.components.Files import StackFileName
 from Stacks.components.ResultTypes import Either
+from logging import Logger
 
 class StacksSaveCommand(StacksCommand):
 
-  def on_run(self, window: sublime.Window, stack_file: StackFileName):
+  def on_run(self, window: sublime.Window, stack_file: StackFileName, logger: Logger):
     loaded_stack_name = window.settings().get(_loaded_stack_name_settings_key)
 
     if loaded_stack_name:

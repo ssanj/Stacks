@@ -5,13 +5,14 @@ from typing import NamedTuple, Optional, List, Any, Dict
 from Stacks.components.FileUtils import LoadError, load_stack_file
 from Stacks.components.ResultTypes import Either, RightEither, LeftEither
 from Stacks.components.Files import StackFileName
+from logging import Logger
 
 class SelectedStackName(NamedTuple):
   value: str
 
 class StacksLoaderCommand(StacksCommand):
 
-  def on_run(self, window: sublime.Window, stack_file: StackFileName) -> None:
+  def on_run(self, window: sublime.Window, stack_file: StackFileName, logger: Logger) -> None:
     load_result: Either[LoadError, Dict[str, Any]] = load_stack_file(stack_file)
 
     if load_result.has_value():
@@ -21,7 +22,7 @@ class StacksLoaderCommand(StacksCommand):
       window.show_quick_panel(
         items = items,
         placeholder = self.loader_message(),
-        on_select = lambda index: self.on_stack_loaded(stack_file, window, loaded_stacks, items, index)
+        on_select = lambda index: self.on_stack_loaded(stack_file, window, logger, loaded_stacks, items, index)
       )
     else:
       error: LoadError = load_result.error()
@@ -33,15 +34,15 @@ class StacksLoaderCommand(StacksCommand):
       else:
         sublime.message_dialog(f"An unexpected error occurred: {error}")
 
-  def on_stack_loaded(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], stack_names: List[str], stack_name_index: int) -> None:
+  def on_stack_loaded(self, stack_file: StackFileName, window: sublime.Window, logger: Logger, loaded_stacks: Dict[str, Any], stack_names: List[str], stack_name_index: int) -> None:
     if stack_name_index < 0 or stack_name_index > len(stack_names):
       return
 
     selected_stack_name = SelectedStackName(stack_names[stack_name_index])
-    self.on_stack_name_selected(stack_file, window, loaded_stacks, selected_stack_name)
+    self.on_stack_name_selected(stack_file, window, loaded_stacks, selected_stack_name, logger)
 
   @abstractmethod
-  def on_stack_name_selected(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], selected_stack_name: SelectedStackName) -> None:
+  def on_stack_name_selected(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], selected_stack_name: SelectedStackName, logger: Logger) -> None:
     pass
 
   @abstractmethod

@@ -29,11 +29,12 @@
 1. Allow the user to delete a stack by name [x]
 1. Allow saving back to the existing stack (if you already opened it) [x]
 1. Show stack name on status bar
-1. Add logging through Logger
+1. Add logging through Logger [x]
 1. Prompt before closing all tabs [x]
-1. Move out common functions that return an ADT (open_stack, save_stack)
+1. Move out common functions that return an ADT (open_stack, save_stack) [x]
 1. Rename stack? [x]
 1. If the view gets detached from a saved stack, allow reattaching and saving to an existing stack.
+1. Allow closing a stack [x]
 
 # Questions
 

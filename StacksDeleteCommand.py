@@ -8,6 +8,7 @@ from Stacks.StacksLoaderCommand import StacksLoaderCommand, SelectedStackName
 from Stacks.components.FileUtils import SaveError, save_stack_file
 from Stacks.components.Files import StackFileName
 from Stacks.components.ResultTypes import Either
+from logging import Logger
 
 class StacksDeleteCommand(StacksLoaderCommand):
 
@@ -15,7 +16,7 @@ class StacksDeleteCommand(StacksLoaderCommand):
     return "Which stack would you like to delete?"
 
 
-  def on_stack_name_selected(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], selected_stack_name: SelectedStackName) -> None:
+  def on_stack_name_selected(self, stack_file: StackFileName, window: sublime.Window, loaded_stacks: Dict[str, Any], selected_stack_name: SelectedStackName, logger: Logger) -> None:
     stack_to_delete = selected_stack_name.value
 
     loaded_stacks.pop(stack_to_delete, None)
