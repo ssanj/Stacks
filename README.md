@@ -36,3 +36,7 @@ Delete a given stack with `CTRL + SHIFT + F2`
 
 Rename a stack with `SHIFT + CMD + F2`
 
+### Close active stack
+
+Close an active stack with `CTRL + SHIFT + CMD + F2`
+
