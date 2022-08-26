@@ -59,10 +59,26 @@ class StacksLoaderCommand(StacksCommand):
         files_str: str = "<br/>".join(files)
         content = f"{content}<br/>{group_str}:<br/>{files_str}"
 
-      layout_extent: Tuple[float, float] = view.layout_extent()
+      layout_extent: Tuple[float, float] = view.viewport_extent()
       max_width  = int(layout_extent[0])
       max_height = int(layout_extent[1])
-      view.show_popup(content, max_width = max_width, max_height = max_height)
+      location = self.get_centre_point(view)
+
+      view.show_popup(content, location = location, max_width = max_width, max_height = max_height)
+
+
+  def get_centre_point(self, view: sublime.View) -> int:
+    # copied from https://forum.sublimetext.com/t/move-cursor-to-top-middle-bottom-of-visible-lines/4586
+    screenful = view.visible_region()
+
+    col = view.rowcol(view.sel()[0].begin())[1]
+    row_a = view.rowcol(screenful.a)[0]
+    row_b = view.rowcol(screenful.b)[0]
+
+    middle_row = int((row_a + row_b) / 2)
+    location = view.text_point(middle_row, col)
+
+    return location
 
 
   def on_stack_loaded(self, window: sublime.Window, logger: Logger, stack_file: StackFileName, loaded_stacks: Dict[str, Any], stack_names: List[str], stack_name_index: int) -> None:
