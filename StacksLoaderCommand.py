@@ -60,7 +60,9 @@ class StacksLoaderCommand(StacksCommand):
         content = f"{content}<br/>{group_str}:<br/>{files_str}"
 
       layout_extent: Tuple[float, float] = view.layout_extent()
-      view.show_popup(content, max_width=int(layout_extent[0]), max_height=int(layout_extent[1]))
+      max_width  = int(layout_extent[0])
+      max_height = int(layout_extent[1])
+      view.show_popup(content, max_width = max_width, max_height = max_height)
 
 
   def on_stack_loaded(self, window: sublime.Window, logger: Logger, stack_file: StackFileName, loaded_stacks: Dict[str, Any], stack_names: List[str], stack_name_index: int) -> None:
