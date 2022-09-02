@@ -52,7 +52,7 @@ class StacksLoaderCommand(StacksCommand):
 
     view = window.active_view()
     if view:
-      content = ""
+      content = f"<h2>{selected_stack_name}</h2>"
       for gf in group_files:
         group_str: str = gf[0]
         files: List[str] = gf[1]
