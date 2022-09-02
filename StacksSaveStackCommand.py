@@ -2,9 +2,9 @@ import sublime
 import sublime_plugin
 from typing import Optional, Any, Dict
 import json
-from Stacks.components.Common import _open_stacks, _get_window_state, _close_open_views, _loaded_stack_name_settings_key
+from Stacks.components.Common import _get_window_state, _close_open_views, _loaded_stack_name_settings_key
 from Stacks.StacksCommand import StacksCommand
-from Stacks.components.FileUtils import SaveError, save_stack_file
+from Stacks.components.FileUtils import SaveError, LoadError, save_stack_file, load_stack_file
 from Stacks.components.Files import StackFileName
 from Stacks.components.ResultTypes import Either
 from logging import Logger
@@ -21,9 +21,9 @@ class StacksSaveCommand(StacksCommand):
       elif update_stack == sublime.DIALOG_CANCEL:
         return
       else:
-        pass #ask for new name
+        pass #ask for new name below
     else:
-      pass
+      pass #ask for new name below
 
     window.show_input_panel(
       caption = "Stack name",
@@ -36,11 +36,12 @@ class StacksSaveCommand(StacksCommand):
   def on_stack_name(self, window: sublime.Window, stack_file: StackFileName, stack_name: str) -> None:
     # TODO: Merge with existing values
     # TODO: if name is already taken prompt for overwrite confirmation?
+    load_result: Either[LoadError, Dict[str, Any]] = load_stack_file(stack_file)
 
-    loaded_stacks: Optional[Dict[str, Any]] = _open_stacks(window, show_error = False)
+    # We need to know if this is a rename or direct save
+    stacks_to_save: Dict[str, Any] = load_result.value() if load_result.has_value() else {}
     views_to_save = _get_window_state(window)
 
-    stacks_to_save: Dict[str, Any] = loaded_stacks if loaded_stacks else {}
     stacks_to_save.update({ stack_name : views_to_save})
     new_stack_json_content: str = json.dumps(stacks_to_save)
     save_result: Either[SaveError, None] = save_stack_file(stack_file, new_stack_json_content)
@@ -60,5 +61,3 @@ class StacksSaveCommand(StacksCommand):
     else:
       error: SaveError = save_result.error()
       sublime.message_dialog(f"Could not save stack.\nError:\n{str(error.value)}")
-
-
